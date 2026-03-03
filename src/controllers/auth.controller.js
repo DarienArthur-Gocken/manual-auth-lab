@@ -69,9 +69,16 @@ export const isLoggedIn = (req, res, next) => {
 export const hasRole = (role) => {
     return (req, res, next) => {
         if(!req.user || req.user.role !== role) {
-            return res.redirect("/login?errors")
+            return res.redirect("/login?errors=Access denied");
         }
-    }
-}
+        next();
+    };
+};
+
+export const logout = (req, res) => {
+    req.session.destroy(() => {
+        return res.redirect("/login");
+    });
+};
 
 export default { loginPage, registerPage, register, login };
